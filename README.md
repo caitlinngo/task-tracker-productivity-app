@@ -3,10 +3,21 @@ A full-stack productivity tool that allows users to manage tasks with deadlines,
 
 ## FEATURES
 - create, update, delete tasks
-- set deadlines and priroties
-- filter and organize tasks
+- optional due date for each task
+- mark tasks as complete with checkboxes
+- backend API connected to MongoDB Atlas
 
 ## TECH STACK
-- React (for frontend)
-- Node.js + Express (for backend)
-- MongoDB (database)
+
+**Frontend**:
+- React
+- JavaScript
+- JSX
+- CSS
+
+**Backend**:
+- Node.js
+- Express
+- MongoDB (Atlas)
+- Mongoose
+- dotenv
