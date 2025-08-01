@@ -1,0 +1,13 @@
+# Ignore node modules
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Ignore env files
+**/.env
+
+# Ignore build outputs
+client/build/
+
+# Optional: VS Code settings
+.vscode/

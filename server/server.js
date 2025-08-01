@@ -1,28 +1,34 @@
-// 1. Import packages
+// TO RUN: npm start
+// import packages and load .env variables
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-require('dotenv').config(); // Load .env variables
+require('dotenv').config(); 
 
-// 2. Initialize app and port
+// initialize app and port
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// 3. Middleware
+// middleware
 app.use(cors());
 app.use(express.json()); // Parse JSON requests
 
-// 4. MongoDB connection
+//console.log('Connecting to MongoDB URI:', process.env.MONGODB_URI);
+
+// MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log('✅ Connected to MongoDB'))
 .catch((err) => console.error('❌ MongoDB connection error:', err));
 
-// 5. Test route
+const taskRoutes = require('./routes/tasks');
+app.use('/api/tasks', taskRoutes);
+
+// test route (OPTIONAL)
 app.get('/', (req, res) => {
   res.send('Backend and DB are running!');
 });
 
-// 6. Start the server
+// start the server
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
 });
