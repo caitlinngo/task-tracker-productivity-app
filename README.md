@@ -5,6 +5,7 @@ A full-stack productivity tool that allows users to manage tasks with deadlines,
 - create, update, delete tasks
 - optional due date for each task
 - mark tasks as complete with checkboxes
+- filter tasks by urgency, completion, and due date
 - backend API connected to MongoDB Atlas
 
 ## TECH STACK
