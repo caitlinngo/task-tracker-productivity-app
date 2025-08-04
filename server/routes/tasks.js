@@ -15,9 +15,10 @@ router.get('/', async (req, res) => {
 // POST new task
 router.post('/', async (req, res) => {
   try {
-    const { title, dueDate } = req.body;
+    const { title, dueDate, urgency } = req.body;
     const newTask = new Task({
       title,
+      urgency,
       completed: false,
       dueDate: dueDate || null, // optional
     });

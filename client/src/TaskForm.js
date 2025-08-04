@@ -1,81 +1,61 @@
 import React, { useState } from 'react';
 
-function TaskForm({ onTaskAdded }) {
+const TaskForm = ({ onSubmit }) => {
   const [title, setTitle] = useState('');
-  //const [priority, setPriority] = useState('');
   const [dueDate, setDueDate] = useState('');
-
+  const [urgency, setUrgency] = useState('medium'); // default value
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    if (!title.trim()) return; // prevent empty tasks
+    const taskData = {
+      title,
+      dueDate: dueDate || null,
+      urgency
+    };
   
     try {
       const response = await fetch('http://localhost:5001/api/tasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title,
-          dueDate: dueDate ? new Date(dueDate).toISOString() : null,
-        }),
+        body: JSON.stringify(taskData),
       });
   
-      if (!response.ok) {
-        throw new Error('Failed to add task');
-      }
+      const savedTask = await response.json(); // ✅ includes _id, completed, etc.
+      onSubmit(savedTask); // ✅ use this instead of raw taskData
   
-      const newTask = await response.json();
-      onTaskAdded(newTask); // update task list in App.js
-
-      //clear form fields
+      // Clear form
       setTitle('');
       setDueDate('');
-    } catch (err) {
-      console.error('Error submitting task:', err);
+      setUrgency('medium');
+    } catch (error) {
+      console.error('Error adding task:', error);
     }
   };
   
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
-      <label>
-        Task:
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          style={{ marginLeft: '0.5rem', marginRight: '1rem' }}
-        />
-      </label>
-  
-      <label>
-        Due Date (optional):
-        <input
-          type="date"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          style={{ marginLeft: '0.5rem', marginRight: '1rem' }}
-        />
-      </label>
-  
-      <button
-        type="submit"
-        style={{
-          padding: '0.3rem 0.8rem',
-          backgroundColor: '#007bff',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-        }}
-      >
-        Add Task
-      </button>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={title}
+        placeholder="Enter a task..."
+        onChange={(e) => setTitle(e.target.value)}
+        required
+      />
+      <input
+        type="date"
+        value={dueDate}
+        onChange={(e) => setDueDate(e.target.value)}
+      />
+      <select value={urgency} onChange={(e) => setUrgency(e.target.value)}>
+        <option value="low">Low Urgency</option>
+        <option value="medium">Medium Urgency</option>
+        <option value="high">High Urgency</option>
+      </select>
+      <button type="submit">Add Task</button>
     </form>
   );
-  
-}
+};
 
 export default TaskForm;

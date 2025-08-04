@@ -12,6 +12,13 @@ function TaskItem({ task, onToggle, onDelete, onUpdateTitle }) {
     setIsEditing(false);
   };
 
+  // Color for urgency levels
+  const urgencyColor = {
+    low: 'green',
+    medium: 'orange',
+    high: 'red',
+  };
+
   return (
     <li
       style={{
@@ -26,12 +33,19 @@ function TaskItem({ task, onToggle, onDelete, onUpdateTitle }) {
     >
       {/* Checkbox + title */}
       <div style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-        <input
-          type="checkbox"
-          checked={task.completed}
-          onChange={() => onToggle(task._id, task.completed)}
-          style={{ marginRight: '0.75rem' }}
-        />
+      <input
+        type="checkbox"
+        checked={task.completed}
+        onChange={() => {
+          console.log("Checkbox clicked:", task); // Debug
+          if (!task._id) {
+            console.error("Missing _id in task!");
+            return;
+          }
+          onToggle(task._id, task.completed);
+        }}
+      />
+
 
         {isEditing ? (
           <input
@@ -71,6 +85,20 @@ function TaskItem({ task, onToggle, onDelete, onUpdateTitle }) {
       {task.dueDate && (
         <div style={{ marginRight: '1rem', fontSize: '0.9rem', color: '#666' }}>
           Due: {new Date(task.dueDate).toLocaleDateString()}
+        </div>
+      )}
+
+      {/* Urgency display */}
+      {task.urgency && (
+        <div
+          style={{
+            marginRight: '1rem',
+            fontWeight: 'bold',
+            color: urgencyColor[task.urgency] || 'gray',
+            fontSize: '0.9rem',
+          }}
+        >
+          [{task.urgency.toUpperCase()}]
         </div>
       )}
 
